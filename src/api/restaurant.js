@@ -7,8 +7,7 @@ export const getRestaurants = (data) => {
     url: 'v1/restaurants'
   };
   return _get(req);
-}
-
+};
 
 //获取某个商家具体信息
 export const getRestaurant = (data) => {
@@ -16,7 +15,7 @@ export const getRestaurant = (data) => {
     url: `v1/restaurant/${data.restaurant_id}`
   };
   return _get(req);
-}
+};
 
 //获取食物
 export const getFoods = (data) => {
@@ -24,7 +23,7 @@ export const getFoods = (data) => {
     url: `v1/food/${data.restaurant_id}`
   };
   return _get(req);
-}
+};
 
 //从购物车减少商品数量
 export const reduceShoppingCart = (data) => {
@@ -33,16 +32,16 @@ export const reduceShoppingCart = (data) => {
     url: 'v1/cart'
   };
   return _put(req);
-}
+};
 
 //输入关键词搜索餐馆
 export const searchRestaurant = (data) => {
   let req = {
     data,
     url: 'v1/search/restaurant'
-  }
+  };
   return _get(req);
-}
+};
 
 //获取评论
 export const restaurantComment = (data) => {
@@ -51,5 +50,5 @@ export const restaurantComment = (data) => {
     url: 'v1/comment'
   };
   return _get(req);
-}
+};
 

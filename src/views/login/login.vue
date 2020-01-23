@@ -25,7 +25,7 @@
         </span>
       </label>
 
-      <div class="button" @click.prevent="login();">
+      <div class="button" @click.prevent="login()">
         <span>登录</span>
       </div>
       <span class="tip">未注册直接输入账号密码，自动注册！</span>

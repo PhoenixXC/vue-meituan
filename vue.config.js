@@ -5,9 +5,13 @@ function resolve(dir) {
 }
 module.exports = {
     lintOnSave: true,
-    chainWebpack: (config) => {
-        config.resolve.alias
-            .set('@', resolve('src'))
-            .set('@assets',resolve('src/assets'))
+    configureWebpack: config => {
+        config.resolve = {
+            extensions: ['.js', '.ts', '.vue'],
+            alias: {
+                '@': resolve('src'),
+                '@assets': resolve('src/assets')
+            }
+        };
     }
 };

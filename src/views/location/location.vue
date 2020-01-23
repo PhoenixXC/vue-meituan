@@ -48,10 +48,10 @@
         //如果是首页定位
         if (this.fromIndex) {
           this.$store.dispatch('clearAddress');
-          this.$store.dispatch('recordAddress', {address: item.title, ...item.location})
+          this.$store.dispatch('recordAddress', {address: item.title, ...item.location});
           this.$router.push('/index');
         } else {  //新增收货地址
-          this.$store.dispatch('recodeDeliveryAddress', item)
+          this.$store.dispatch('recodeDeliveryAddress', item);
           this.$router.go(-1);                //返回上一个路由
         }
       }

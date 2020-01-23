@@ -12,7 +12,7 @@ export default new Router({
     {
       path: '/index',
       name: '首页',
-      component: r => require.ensure([], () => r(require('@/views/index/index')), 'Index'),
+      component: r => require.ensure([], () => r(require('@/views/Index/Index')), 'Index'),
       meta: {keepAlive: true},
     },
     {

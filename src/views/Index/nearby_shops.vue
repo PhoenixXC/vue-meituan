@@ -159,7 +159,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  @import "../../style/mixin.scss";
+  @import "../../style/mixin";
   /*附近商家*/
   .nearby-shops {
     margin: 0.1rem 0;
