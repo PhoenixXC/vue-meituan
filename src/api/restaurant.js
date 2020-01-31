@@ -1,6 +1,6 @@
 import {_get, _put} from './index'
 
-//获取一定数量的商家
+// 获取一定数量的商家
 export const getRestaurants = (data) => {
   let req = {
     data: data,
@@ -9,7 +9,7 @@ export const getRestaurants = (data) => {
   return _get(req);
 };
 
-//获取某个商家具体信息
+// 获取某个商家具体信息
 export const getRestaurant = (data) => {
   let req = {
     url: `v1/restaurant/${data.restaurant_id}`
@@ -17,7 +17,7 @@ export const getRestaurant = (data) => {
   return _get(req);
 };
 
-//获取食物
+// 获取食物
 export const getFoods = (data) => {
   let req = {
     url: `v1/food/${data.restaurant_id}`
@@ -25,7 +25,7 @@ export const getFoods = (data) => {
   return _get(req);
 };
 
-//从购物车减少商品数量
+// 从购物车减少商品数量
 export const reduceShoppingCart = (data) => {
   let req = {
     data,
@@ -34,7 +34,7 @@ export const reduceShoppingCart = (data) => {
   return _put(req);
 };
 
-//输入关键词搜索餐馆
+// 输入关键词搜索餐馆
 export const searchRestaurant = (data) => {
   let req = {
     data,

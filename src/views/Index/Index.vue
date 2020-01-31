@@ -2,7 +2,7 @@
 <template>
   <div class="index" ref="scrollWrapper">
     <div class="main-container">
-      <v-head title="美团外卖+"></v-head>
+      <v-head title="美团外卖+"/>
       <div class="guide-container">
         <router-link to="/location?fromIndex=true" class="location">
           <i class="iconfont">&#xe604;</i>

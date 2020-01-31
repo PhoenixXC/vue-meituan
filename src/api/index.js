@@ -1,13 +1,16 @@
-import config from '../config'
-import router from '@/router'
-import {removeInfo} from '@/utils/auth'
+import config from '../config';
+import router from '@/router';
+import {removeInfo} from '@/utils/auth';
 
 const baseURL = config.baseURL;
 const axios = require('axios').create({
-  baseURL: baseURL,            //api请求的baseURL
+  baseURL: baseURL,
   timeout: 0,
-  withCredentials: true, // 允许跨域 cookie
-  headers: {'X-Requested-With': 'XMLHttpRequest'},
+  withCredentials: true,
+  headers: {
+    'X-Requested-With': 'XMLHttpRequest',
+    'Authorization': localStorage.getItem('Authorization')
+  },
   maxContentLength: 2000,
   transformResponse: [function (data) {
     try {
@@ -26,8 +29,15 @@ const axios = require('axios').create({
 
 // get
 export const _get = (req) => {
-  return axios.get(req.url, {params: req.data})
-};
+    return axios.get(req.url, {
+        headers: {
+          'Authorization': localStorage.getItem('Authorization')
+        },
+        params: req.data
+      }
+    )
+  }
+;
 
 // post
 export const _post = (req) => {
@@ -46,5 +56,5 @@ export const _delete = (req) => {
 
 //post and no withCredentials
 export const _postNoWithCredentials = (req) => {
-  return axios({method: 'post', url: `/${req.url}`, data: req.data,withCredentials:false})
+  return axios({method: 'post', url: `/${req.url}`, data: req.data, withCredentials: false})
 };

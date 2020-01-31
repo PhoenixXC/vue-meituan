@@ -1,22 +1,22 @@
 <!--选择收货地址-->
 <template>
-  <div class="location">
-    <v-head goBack="true" title="选择收货地址"></v-head>
-    <search placeholder="请输入收货地址" :fun_click="fun_click"></search>
-    <div class="location-now" v-if="fromIndex && !suggestionLists.length" @click="locationNow">
-      <i class="iconfont">&#xe793;</i>
-      <span>点击定位当前位置</span>
+    <div class="location">
+        <v-head goBack="true" title="选择收货地址"/>
+        <search placeholder="请输入收货地址" :fun_click="fun_click"/>
+        <div class="location-now" v-if="fromIndex && !suggestionLists.length" @click="locationNow">
+            <i class="iconfont">&#xe793;</i>
+            <span>点击定位当前位置</span>
+        </div>
+        <div class="lists" v-else>
+            <ul>
+                <li v-for="item in suggestionLists" :key="item.id" @click="selectAddress(item)">
+                    <h3>{{item.title}}</h3>
+                    <span>{{item.address}}</span>
+                </li>
+            </ul>
+        </div>
+        <alert-tip :text="alertText" :showTip.sync="showTip"/>
     </div>
-    <div class="lists" v-else>
-      <ul>
-        <li v-for="item in suggestionLists" :key="item.id" @click="selectAddress(item)">
-          <h3>{{item.title}}</h3>
-          <span>{{item.address}}</span>
-        </li>
-      </ul>
-    </div>
-    <alert-tip :text="alertText" :showTip.sync="showTip"></alert-tip>
-  </div>
 </template>
 
 <script>
@@ -50,9 +50,11 @@
           this.$store.dispatch('clearAddress');
           this.$store.dispatch('recordAddress', {address: item.title, ...item.location});
           this.$router.push('/index');
-        } else {  //新增收货地址
+        } else {
+          // 新增收货地址
           this.$store.dispatch('recodeDeliveryAddress', item);
-          this.$router.go(-1);                //返回上一个路由
+          // 返回上一个路由
+          this.$router.go(-1);
         }
       }
     },
@@ -66,51 +68,57 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  @import "../../style/mixin";
-
-  .location {
-    position: fixed;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
-    overflow-y: auto;
-    background: rgb(244, 244, 244);
-    .location-now {
-      @include px2rem(height, 125);
-      background: #fff;
-      margin-top: 0.3rem;
-      text-align: center;
-      .iconfont {
-        display: inline-block;
-        font-size: 0.4rem;
-        margin-right: 8px;
-        color: $mtYellow;
-      }
-      span {
-        font-size: 0.4rem;
-        font-weight: 500;
-        @include px2rem(line-height, 125);
-      }
-    }
-    // 推荐列表样式
-    .lists {
-      ul {
-        li {
-          border-bottom: 1px solid rgb(231, 231, 231);
-          @include px2rem(height, 125);
-          background: #fff;
-          font-size: 0.34rem;
-          padding-left: 0.2rem;
-          h3 {
-            margin-bottom: 0.2rem;
-            padding-top: 0.2rem;
-          }
-          span {
-            color: rgb(163, 163, 163);
-          }
+    @import "../../style/mixin";
+    
+    .location {
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        overflow-y: auto;
+        background: rgb(244, 244, 244);
+        
+        .location-now {
+            @include px2rem(height, 125);
+            background: #fff;
+            margin-top: 0.3rem;
+            text-align: center;
+            
+            .iconfont {
+                display: inline-block;
+                font-size: 0.4rem;
+                margin-right: 8px;
+                color: $mtYellow;
+            }
+            
+            span {
+                font-size: 0.4rem;
+                font-weight: 500;
+                @include px2rem(line-height, 125);
+            }
         }
-      }
+        
+        // 推荐列表样式
+        .lists {
+            ul {
+                li {
+                    border-bottom: 1px solid rgb(231, 231, 231);
+                    @include px2rem(height, 125);
+                    background: #fff;
+                    font-size: 0.34rem;
+                    padding-left: 0.2rem;
+                    
+                    h3 {
+                        margin-bottom: 0.2rem;
+                        padding-top: 0.2rem;
+                    }
+                    
+                    span {
+                        color: rgb(163, 163, 163);
+                    }
+                }
+            }
+        }
     }
-  }
 </style>

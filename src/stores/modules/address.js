@@ -27,6 +27,7 @@ const actions = {
     location().then((response) => {
       if (response.data.status === 200) {
         let data = response.data.data;
+        console.log(data);
         commit(types.RECORD_ADDRESS, {address: data.address, ...data.location}); //保存title 和 经纬度到VUEX中
         commit(types.LOCATION_READY, true);    //定位完成 拉取商店
       }
@@ -63,7 +64,7 @@ const mutations = {
     state.deliveryAddress = {...address};
   },
   [types.FAIL_LOCATION](state) {
-    let address = {address: '定位失败...', lat: '', lng: ''}
+    let address = {address: '定位失败...', lat: '', lng: ''};
     state.address = {...address};
   }
 };

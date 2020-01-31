@@ -1,59 +1,57 @@
 <!--我的页面-->
 <template>
-  <div id="home">
-    <v-head title="我的" goBack="true"></v-head>
-    <div id="user-info">
-      <label class="avatar" for="file">
-        <img :src="avatar">
-        <input id="file" type="file" @change="fileUpload($event)" style="display: none;">
-      </label>
-      <router-link v-if="!username" class="login" to="/login">登录/注册</router-link>
-      <span v-else class="username">{{username}}</span>
+    <div id="home">
+        <v-head title="我的" goBack="true"></v-head>
+        <div id="user-info">
+            <label class="avatar" for="file">
+                <img :src="avatar">
+                <input id="file" type="file" @change="updateAvatar($event)" style="display: none;">
+            </label>
+            <router-link v-if="!username" class="login" to="/login">登录/注册</router-link>
+            <span v-else class="username">{{username}}</span>
+        </div>
+        <div class="fun-container">
+            <ul>
+                <li v-for="(item,index) in myFunList" :key="index" @click="routerChange(item.url)">
+                    <div class="img-wrap">
+                        <img :src="item.picUrl">
+                    </div>
+                    <span>{{item.name}}</span>
+                </li>
+            </ul>
+        </div>
+        <div class="assets">
+            <h3>我的资产</h3>
+            <ul>
+                <li v-for="(item,index) in myAssetsList" :key="index">
+                    <div class="img">
+                        <img :src="item.picUrl">
+                    </div>
+                    <span>{{item.name}}</span>
+                </li>
+            </ul>
+        </div>
+        <div class="intro">
+            <h3>更多推荐</h3>
+            <ul>
+                <li v-for="(item,index) in introList" :key="index">
+                    <div class="img">
+                        <img :src="item.picUrl">
+                    </div>
+                    <span>{{item.name}}</span>
+                </li>
+            </ul>
+        </div>
+        <v-bottom></v-bottom>
+        <router-view></router-view>
+        <v-loading v-show="loading"></v-loading>
+        <alert-tip :text="alertText" :showTip.sync="showTip"></alert-tip>
     </div>
-    <div class="fun-container">
-      <ul>
-        <li v-for="(item,index) in myFunList" :key="index" @click="routerChange(item.url)">
-          <div class="img-wrap">
-            <img :src="item.picUrl">
-          </div>
-          <span>{{item.name}}</span>
-        </li>
-      </ul>
-    </div>
-    <div class="assets">
-      <h3>我的资产</h3>
-      <ul>
-        <li v-for="(item,index) in myAssetsList" :key="index">
-          <div class="img">
-            <img :src="item.picUrl">
-          </div>
-          <span>{{item.name}}</span>
-        </li>
-      </ul>
-    </div>
-    <div class="intro">
-      <h3>更多推荐</h3>
-      <ul>
-        <li v-for="(item,index) in introList" :key="index">
-          <div class="img">
-            <img :src="item.picUrl">
-          </div>
-          <span>{{item.name}}</span>
-        </li>
-      </ul>
-    </div>
-    <v-bottom></v-bottom>
-    <router-view></router-view>
-    <v-loading v-show="loading"></v-loading>
-    <alert-tip :text="alertText" :showTip.sync="showTip"></alert-tip>
-  </div>
 </template>
 
 <script>
   import {userInfo, changeAvatar} from '@/api/user'
   import {getInfo} from '@/utils/auth'
-  import {uploadToken, upload} from '@/api/upload'
-  import config from '@/config'
 
   export default {
     data() {
@@ -133,28 +131,28 @@
       }
     },
     methods: {
-      fileUpload(event) {
+      updateAvatar(event) {
         this.loading = true;
         let file = event.target.files[0];
         if (file.size > 1024 * 1024 * 3) {    //只能传2M以内照片
-          this.alertText = '上传失败，只能传2M以内图片'
+          this.alertText = '上传失败，只能传2M以内图片';
           this.showTip = true;
         } else {
-          uploadToken().then((response) => {
-            if (response.data.status === 200) {
-              let data = {token: response.data.uptoken, file}
-              upload(data).then((upResponse) => {
-                let pic_url = config.domain + upResponse.data.key
-                this.avatar = pic_url;
-                this.loading = false;
-                changeAvatar({pic_url}).then(() => {
-                })     //更新到数据库
-              })
-            } else {
-              this.alertText = response.data.message
+          let base64;
+          let reader = new FileReader();
+          reader.readAsDataURL(file);
+          reader.onload = () => {
+            base64 = reader.result;
+            changeAvatar(base64).then((response) => {
+              this.loading = false;
+              this.alertText = response.data.msg;
               this.showTip = true;
-            }
-          })
+              this.avatar = response.data.data.avatar;
+            })
+          };
+          reader.onerror = function (error) {
+            this.alertText = error;
+          };
         }
       },
       routerChange(url) {
@@ -177,100 +175,116 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  @import "../../style/common.scss";
-  @import "../../style/mixin.scss";
-
-  #home {
-    height: 100%;
-    background: rgb(244, 244, 244);
-  }
-
-  #user-info {
-    @include px2rem(height, 200);
-    color: #000;
-    display: flex;
-    align-items: center;
-    background: #fff;
-    .avatar {
-      @include px2rem(width, 115);
-      @include px2rem(height, 115);
-      text-align: center;
-      margin: 0 0.8rem;
-      border-radius: 50%;
-      overflow: hidden;
-      border: 1px solid #333;
-      img {
-        width: 100%;
+    @import "../../style/common.scss";
+    @import "../../style/mixin.scss";
+    
+    #home {
         height: 100%;
-      }
+        background: rgb(244, 244, 244);
     }
-    .login {
-      font-size: 0.45rem;
-    }
-    .username {
-      font-size: 0.5rem;
-    }
-  }
-
-  .fun-container {
-    margin-top: 0.3rem;
-    background: #fff;
-    ul {
-      @include clearfix;
-      li {
-        width: 25%;
-        @include px2rem(height, 145);
-        float: left;
-        text-align: center;
-        margin: 0.2rem 0;
-        .img {
-          @include px2rem(width, 70);
-          @include px2rem(height, 70);
-          margin: 0.1rem auto;
-          img {
-            width: 100%;
-            height: 100%;
-          }
+    
+    #user-info {
+        @include px2rem(height, 200);
+        color: #000;
+        display: flex;
+        align-items: center;
+        background: #fff;
+        
+        .avatar {
+            @include px2rem(width, 115);
+            @include px2rem(height, 115);
+            text-align: center;
+            margin: 0 0.8rem;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 1px solid #333;
+            
+            img {
+                width: 100%;
+                height: 100%;
+            }
         }
-        span {
-          font-size: 0.35rem;
+        
+        .login {
+            font-size: 0.45rem;
         }
-      }
-    }
-  }
-
-  .assets, .intro {
-    margin-top: 0.2rem;
-    background: #fff;
-    h3 {
-      font-size: 0.5rem;
-      margin-left: 0.3rem;
-      padding-top: 0.3rem;
-      padding-bottom: 0.2rem;
-      border-bottom: 1px solid $bottomLine;
-    }
-    ul {
-      display: flex;
-      padding: 0.3rem 0;
-      li {
-        flex: 1;
-        text-align: center;
-        .img {
-          @include px2rem(width, 55);
-          @include px2rem(height, 55);
-          margin: 0.1rem auto;
-          img {
-            width: 100%;
-            height: 100%;
-          }
+        
+        .username {
+            font-size: 0.5rem;
         }
-        span {
-          font-size: 0.35rem;
-        }
-      }
     }
-  }
-  .intro {
-    padding-bottom: 1rem;
-  }
+    
+    .fun-container {
+        margin-top: 0.3rem;
+        background: #fff;
+        
+        ul {
+            @include clearfix;
+            
+            li {
+                width: 25%;
+                @include px2rem(height, 145);
+                float: left;
+                text-align: center;
+                margin: 0.2rem 0;
+                
+                .img {
+                    @include px2rem(width, 70);
+                    @include px2rem(height, 70);
+                    margin: 0.1rem auto;
+                    
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                
+                span {
+                    font-size: 0.35rem;
+                }
+            }
+        }
+    }
+    
+    .assets, .intro {
+        margin-top: 0.2rem;
+        background: #fff;
+        
+        h3 {
+            font-size: 0.5rem;
+            margin-left: 0.3rem;
+            padding-top: 0.3rem;
+            padding-bottom: 0.2rem;
+            border-bottom: 1px solid $bottomLine;
+        }
+        
+        ul {
+            display: flex;
+            padding: 0.3rem 0;
+            
+            li {
+                flex: 1;
+                text-align: center;
+                
+                .img {
+                    @include px2rem(width, 55);
+                    @include px2rem(height, 55);
+                    margin: 0.1rem auto;
+                    
+                    img {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                
+                span {
+                    font-size: 0.35rem;
+                }
+            }
+        }
+    }
+    
+    .intro {
+        padding-bottom: 1rem;
+    }
 </style>

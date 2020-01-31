@@ -1,6 +1,7 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
+import VueCookies from 'vue-cookies'
 import App from './App'
 import router from './router'
 import store from './stores'
@@ -19,7 +20,9 @@ Vue.component('v-star', Star);
 Vue.component('alert-tip', AlertTip);
 Vue.component('v-loading',Loading);
 
-Vue.config.productionTip = false
+Vue.use(VueCookies);
+
+Vue.config.productionTip = false;
 
 if ('addEventListener' in document) {
   document.addEventListener('DOMContentLoaded', function() {
@@ -33,4 +36,4 @@ new Vue({
     router,
     store,
     render: h => h(App),
-}).$mount('#app')
+}).$mount('#app');

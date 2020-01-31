@@ -12,7 +12,7 @@
     name: 'app',
     mounted() {
       // 获取购物车信息 因为加购物车可以不用登录 所以用localStorage保存着 页面加载时更新到vuex中
-      let cartList = JSON.parse(localStorage.getItem('cartList'))
+      let cartList = JSON.parse(localStorage.getItem('cartList'));
       if (cartList) {
         this.$store.dispatch('updateCart', {cartList})
       }

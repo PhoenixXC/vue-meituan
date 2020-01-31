@@ -1,4 +1,4 @@
-import {_get, _post, _delete} from './index'
+import {_get, _post, _delete, _put} from './index'
 
 //获取用户所有地址
 export const getAllAddress = (data) => {
@@ -44,34 +44,37 @@ export const deleteAddress = (data) => {
   return _delete(req)
 };
 
-//登录
+// [OK] 登录
 export const login = (data) => {
   let req = {
     data,
-    url: 'admin/user_login'
+    url: 'login/login_name_pass'
   };
   return _post(req);
 };
 
-//获取用户信息
+// [OK] 获取用户信息
 export const userInfo = (data) => {
   let req = {
     data,
-    url: 'admin/user_info'
+    url: 'user/avatar'
   };
   return _get(req);
 };
 
-//改变用户头像
+// [OK] 改变用户头像
 export const changeAvatar = (data) => {
   let req = {
-    data,
-    url: 'admin/change_avatar'
+    data: {
+      "userAvatar": data
+    },
+    url: 'user/avatar'
   };
-  return _post(req)
+  return _put(req);
 };
 
-//获取我的评论
+// 弃用 ----------------------------------------
+// 获取我的评论
 export const comment = (data) => {
   let req = {
     data,

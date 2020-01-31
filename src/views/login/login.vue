@@ -62,12 +62,14 @@
           this.showTip = true;
           return;
         }
-        login({username: this.username, password: this.password}).then((response) => {
+        login({userName: this.username, userPassword: this.password}).then((response) => {
           if (response.data.status === 200) {
             setInfo(this.username);
+            localStorage.setItem("Authorization", response.data.data.token);
+            localStorage.setItem("uid", response.data.data.id);
             this.$router.go(-1);
           } else {
-            this.alertText = response.data.message;
+            this.alertText = response.data.msg;
             this.showTip = true;
           }
         });

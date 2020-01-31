@@ -1,4 +1,4 @@
-const userInfo = 'mt-username'
+const userInfo = 'mt-username';
 
 export function getInfo() {
   return localStorage.getItem(userInfo)

@@ -5,6 +5,9 @@ function resolve(dir) {
 }
 module.exports = {
     lintOnSave: true,
+    devServer: {
+        port: 9999
+    },
     configureWebpack: config => {
         config.resolve = {
             extensions: ['.js', '.ts', '.vue'],
